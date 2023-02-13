@@ -1,0 +1,60 @@
+version: '3'
+
+
+networks:
+    laravel:
+
+services:
+    nginx:
+        image: nginx:stable-alpine
+        container_name: nginx-mostafa
+        volumes:
+            - C:/laragon/www/laravel-nuxt/back-end:/var/www/html
+            - C:/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            -   "8060:80"
+        depends_on:
+            - php
+            - mysql
+        networks:
+            - laravel
+
+    mysql:
+        image: library/mysql:5.7.22
+        container_name: mysql-mostafa
+        restart: unless-stopped
+        ports:
+            -   "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: backend_db3
+            MYSQL_USER: backend_user3
+            MYSQL_PASSWORD: DF@f$Ss13
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - ./mysql:/var/lib/mysql
+            - ./init.d:/docker-entrypoint-initdb.d
+        command:
+            - --default-authentication-plugin=mysql_native_password
+            - --init-file=/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - laravel
+
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: php-mostafa
+        volumes:
+            - C:/laragon/www/laravel-nuxt/back-end:/var/www/html
+        ports:
+            - "9000:9000"
+        links:
+            -   mysql
+        networks:
+            - laravel
+
+volumes:
+    dbdata:
+
