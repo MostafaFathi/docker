@@ -11,9 +11,6 @@ services:
         volumes:
             - C:/laragon/www/laravel-nuxt/back-end:/var/www/html
             - C:/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        environment:
-            - NGINX_HOST=mostafahilles
-            - NGINX_PORT=80
         ports:
             -   "8060:80"
         depends_on:
@@ -70,6 +67,7 @@ services:
             -   mysql
         networks:
             - laravel
+
 
 volumes:
     dbdata:
